@@ -7,6 +7,7 @@ package interpol
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -15,7 +16,7 @@ import (
 var (
 	ErrUnexpectedClose = errors.New("interpol: unexpected close in template")
 	ErrExpectingClose  = errors.New("interpol: expecting close in template")
-	ErrKeyNotFound     = errors.New("interpol: key not found")
+	ErrKeyNotFound     = "interpol: key not found: %q"
 	ErrReadByteFailed  = errors.New("interpol: read byte failed")
 )
 
@@ -162,7 +163,7 @@ func WithMap(template string, m map[string]string) (string, error) {
 	format := func(key string, w io.Writer) error {
 		value, ok := m[key]
 		if !ok {
-			return ErrKeyNotFound
+			return errors.New(fmt.Sprintf(ErrKeyNotFound, key))
 		}
 		_, err := w.Write([]byte(value))
 		return err
