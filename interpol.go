@@ -163,7 +163,7 @@ func WithMap(template string, m map[string]string) (string, error) {
 	format := func(key string, w io.Writer) error {
 		value, ok := m[key]
 		if !ok {
-			return errors.New(fmt.Sprintf(ErrKeyNotFound, key))
+			return fmt.Errorf(ErrKeyNotFound, key)
 		}
 		_, err := w.Write([]byte(value))
 		return err
